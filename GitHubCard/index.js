@@ -56,7 +56,7 @@ const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigkne
 */
 
 function cardMaker(obj){
-  
+
   const card = document.createElement('div');
   const image = document.createElement('img');
   const cardInfo = document.createElement('div');
@@ -73,29 +73,28 @@ function cardMaker(obj){
   cardInfo.classList.add('card-info');
   personName.classList.add('name');
   username.classList.add('username');
-  
 
-  card.appendChild(image);
-  card.appendChild(cardInfo);
-  cardInfo.appendChild(personName);
-  cardInfo.appendChild(username);
-  cardInfo.appendChild(userLocation);
-  cardInfo.appendChild(profile);
-  profile.appendChild(address);
-  cardInfo.appendChild(numFollowers);
-  cardInfo.appendChild(numFollowing);
-  cardInfo.appendChild(userBio);
-  
   image.setAttribute('src', obj.avatar_url);
   personName.textContent = obj.name;
   username.textContent = obj.login;
   userLocation.textContent = (`Location: ${obj.location}`);
   address.textContent = (obj.html_url);
   address.setAttribute('href', obj.html_url);
-  profile.textContent = (`Profile: ${address}`);
+  profile.textContent = `Profile: `;
   numFollowers.textContent = (`Followers: ${obj.followers}`);
   numFollowing.textContent = (`Following: ${obj.following}`);
   userBio.textContent = (`Bio: ${obj.bio}`);
+  
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(personName);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(userLocation);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(numFollowers);
+  cardInfo.appendChild(numFollowing);
+  cardInfo.appendChild(userBio);
+  profile.appendChild(address);
 
   return card;
 }
@@ -108,7 +107,7 @@ axios
   // console.log('RESPONSE: ', res);
   const profileInfo = res.data;
   const profileCard = cardMaker(profileInfo);
-  cardsContainer.appendChild(profileCard);
+  cardsContainer.appendChild(profileCard); 
 })
 .catch(err => {
   console.log(err);
