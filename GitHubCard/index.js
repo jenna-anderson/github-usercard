@@ -1,8 +1,13 @@
+import axios from 'axios';
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
+
+const jennaData = axios.get('https://api.github.com/users/jenna-anderson');
+console.log(jennaData);
 
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
@@ -28,7 +33,7 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +54,84 @@ const followersArray = [];
       </div>
     </div>
 */
+
+function cardMaker({login, avatar_url, name, location, html_url, followers, following, bio}){
+  
+  const card = document.createElement('div');
+  const image = document.createElement('img');
+  const cardInfo = document.createElement('div');
+  const personName = document.createElement('h3');
+  const username = document.createElement('p');
+  const userLocation = document.createElement('p');
+  const profile = document.createElement('p');
+  const address = document.createElement('a');
+  const numFollowers = document.createElement('p');
+  const numFollowing = document.createElement('p');
+  const userBio = document.createElement('p');
+
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  personName.classList.add('name');
+  username.classList.add('username');
+  
+
+  card.appendChild(image);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(personName);
+  cardInfo.appendChild(username);
+  cardInfo.appendChild(userLocation);
+  cardInfo.appendChild(profile);
+  profile.appendChild(address);
+  cardInfo.appendChild(numFollowers);
+  cardInfo.appendChild(numFollowing);
+  cardInfo.appendChild(userBio);
+  
+  image.setAttribute('src', avatar_url);
+  personName.textContent = name;
+  username.textContent = login;
+  userLocation.textContent = ('Location: ', location);
+  address.textContent = (html_url);
+  address.setAttribute('href', html_url);
+  profile.textContent = (`Profile: ` + address);
+  numFollowers.textContent = (`Followers: ${followers}`);
+  numFollowing.textContent = (`Following: ${following}`);
+  userBio.textContent = (`Bio: ${bio}`);
+
+  return card;
+}
+
+const cardsContainer = document.querySelector('div.cards');
+
+axios
+.get('https://api.github.com/users/jenna-anderson')
+.then(res => {
+  // console.log('RESPONSE: ', res);
+  const profileInfo = res.data;
+  const profileCard = cardMaker(profileInfo);
+  cardsContainer.appendChild(profileCard);
+  // })
+})
+.catch(err => {
+  console.log(err);
+})
+
+
+followersArray.forEach(elem => {
+axios
+.get('https://api.github.com/users/elem')
+.then(res => {
+  const profileInfo = res.data;
+  profileInfo.forEach(elem => {
+    const profileCard = cardMaker({login, avatar_url, name, location, html_url, followers, following, bio})
+    cardsContainer.appendChild(profileCard);
+})
+})
+.catch(err => {
+  console.log(err);
+})
+})
+
+
 
 /*
   List of LS Instructors Github username's:
