@@ -55,7 +55,7 @@ const followersArray = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigkne
     </div>
 */
 
-function cardMaker({login, avatar_url, name, location, html_url, followers, following, bio}){
+function cardMaker(obj){
   
   const card = document.createElement('div');
   const image = document.createElement('img');
@@ -86,16 +86,16 @@ function cardMaker({login, avatar_url, name, location, html_url, followers, foll
   cardInfo.appendChild(numFollowing);
   cardInfo.appendChild(userBio);
   
-  image.setAttribute('src', avatar_url);
-  personName.textContent = name;
-  username.textContent = login;
-  userLocation.textContent = ('Location: ', location);
-  address.textContent = (html_url);
-  address.setAttribute('href', html_url);
-  profile.textContent = (`Profile: ` + address);
-  numFollowers.textContent = (`Followers: ${followers}`);
-  numFollowing.textContent = (`Following: ${following}`);
-  userBio.textContent = (`Bio: ${bio}`);
+  image.setAttribute('src', obj.avatar_url);
+  personName.textContent = obj.name;
+  username.textContent = obj.login;
+  userLocation.textContent = (`Location: ${obj.location}`);
+  address.textContent = (obj.html_url);
+  address.setAttribute('href', obj.html_url);
+  profile.textContent = (`Profile: ${address}`);
+  numFollowers.textContent = (`Followers: ${obj.followers}`);
+  numFollowing.textContent = (`Following: ${obj.following}`);
+  userBio.textContent = (`Bio: ${obj.bio}`);
 
   return card;
 }
@@ -109,7 +109,6 @@ axios
   const profileInfo = res.data;
   const profileCard = cardMaker(profileInfo);
   cardsContainer.appendChild(profileCard);
-  // })
 })
 .catch(err => {
   console.log(err);
@@ -118,13 +117,11 @@ axios
 
 followersArray.forEach(elem => {
 axios
-.get('https://api.github.com/users/elem')
+.get(`https://api.github.com/users/${elem}`)
 .then(res => {
   const profileInfo = res.data;
-  profileInfo.forEach(elem => {
-    const profileCard = cardMaker({login, avatar_url, name, location, html_url, followers, following, bio})
-    cardsContainer.appendChild(profileCard);
-})
+  const profileCard = cardMaker(profileInfo);
+  cardsContainer.appendChild(profileCard);
 })
 .catch(err => {
   console.log(err);
